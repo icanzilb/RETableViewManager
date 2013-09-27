@@ -33,6 +33,9 @@
 @end
 
 @implementation REActionBar
+{
+    UIBarButtonItem *doneButton;
+}
 
 - (id)initWithDelegate:(id)delegate
 {
@@ -47,7 +50,7 @@
         self.barStyle = UIBarStyleBlackTranslucent;
     }
     
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"") style:UIBarButtonItemStyleDone target:self action:@selector(handleActionBarDone:)];
+    doneButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"") style:UIBarButtonItemStyleDone target:self action:@selector(handleActionBarDone:)];
     
     self.navigationControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:NSLocalizedString(@"Previous", @""), NSLocalizedString(@"Next", @""), nil]];
     self.navigationControl.momentary = YES;
@@ -74,6 +77,12 @@
 {
     if ([self.actionBarDelegate respondsToSelector:@selector(actionBar:doneButtonPressed:)])
         [self.actionBarDelegate actionBar:self doneButtonPressed:doneButtonItem];
+}
+
+-(void)setTintColor:(UIColor*)color
+{
+    [super setTintColor: color];
+    doneButton.tintColor = color;
 }
 
 @end

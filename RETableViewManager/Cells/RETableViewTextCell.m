@@ -83,6 +83,16 @@
     self.textField.secureTextEntry = self.item.secureTextEntry;
     self.textField.clearButtonMode = self.item.clearButtonMode;
     self.textField.clearsOnBeginEditing = self.item.clearsOnBeginEditing;
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+        if ([self.textField.inputAccessoryView isKindOfClass:[REActionBar class]]) {
+            REActionBar* actionBar = (REActionBar*)self.textField.inputAccessoryView;
+            if (self.textField.keyboardAppearance == UIKeyboardAppearanceDark) {
+                actionBar.barStyle = UIBarStyleBlack;
+                [actionBar setTintColor:[UIColor colorWithWhite:0.75 alpha:1.0]];
+            }
+        }
+    }
 }
 
 - (UIResponder *)responder
