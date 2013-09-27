@@ -350,4 +350,15 @@
 
 @property (strong, readonly, nonatomic) NSArray *errors;
 
+///-----------------------------
+/// @name Checking for Validation Errors
+///-----------------------------
+
+/**
+ Allows or denies the text fields in this section to have action bar on top of the keyboard.
+ For short forms you might not need prev/next, so you can save screen estate by turning that off.
+ */
+
+@property (assign, nonatomic) BOOL shouldHideKeyboardActionBar;
+
 @end
