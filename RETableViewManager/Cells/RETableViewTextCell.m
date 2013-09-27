@@ -49,7 +49,6 @@
     
     self.textField = [[UITextField alloc] initWithFrame:CGRectNull];
     self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    self.textField.inputAccessoryView = self.actionBar;
     self.textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.textField.delegate = self;
     [self.textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
@@ -92,6 +91,12 @@
                 [actionBar setTintColor:[UIColor colorWithWhite:0.75 alpha:1.0]];
             }
         }
+    }
+    
+    if (self.item.section.shouldHideKeyboardActionBar) {
+        self.actionBar = nil;
+    } else {
+        self.textField.inputAccessoryView = self.actionBar;
     }
 }
 
