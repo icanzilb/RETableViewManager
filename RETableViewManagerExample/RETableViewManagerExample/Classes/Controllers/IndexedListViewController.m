@@ -10,6 +10,8 @@
 
 @interface IndexedListViewController ()
 
+@property (strong, readwrite, nonatomic) RETableViewManager *manager;
+
 @end
 
 @implementation IndexedListViewController
@@ -35,7 +37,7 @@
         // Add 5 items with name `section title + item index`
         //
         for (NSInteger i = 1; i <= 5; i++)
-            [section addItem:[NSString stringWithFormat:@"%@%i", sectionTitle, i]];
+            [section addItem:[NSString stringWithFormat:@"%@%li", sectionTitle, (long) i]];
         
         [self.manager addSection:section];
     }

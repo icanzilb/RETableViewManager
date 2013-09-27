@@ -1,6 +1,6 @@
 //
-// REFormattedNumberField.h
-// REFormattedNumberField
+// RECommonFunctions.m
+// RETableViewManager
 //
 // Copyright (c) 2013 Roman Efimov (https://github.com/romaonthego)
 //
@@ -23,13 +23,27 @@
 // THE SOFTWARE.
 //
 
-#import <UIKit/UIKit.h>
+#import "RECommonFunctions.h"
 
-@interface REFormattedNumberField : UITextField
+BOOL REDeviceIsUIKit7()
+{
+    return REUIKitIsFlatMode();
+}
 
-@property (copy, readwrite, nonatomic) NSString *format;
-@property (copy, readonly, nonatomic) NSString *unformattedText;
-
-- (NSString *)string:(NSString *)string withNumberFormat:(NSString *)format;
-
-@end
+BOOL REUIKitIsFlatMode()
+{
+    static BOOL isUIKitFlatMode = NO;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if (floor(NSFoundationVersionNumber) > 993.0) {
+            // If your app is running in legacy mode, tintColor will be nil - else it must be set to some color.
+            if (UIApplication.sharedApplication.keyWindow) {
+                isUIKitFlatMode = [UIApplication.sharedApplication.delegate.window performSelector:@selector(tintColor)] != nil;
+            } else {
+                // Possible that we're called early on (e.g. when used in a Storyboard). Adapt and use a temporary window.
+                isUIKitFlatMode = [[UIWindow new] performSelector:@selector(tintColor)] != nil;
+            }
+        }
+    });
+    return isUIKitFlatMode;
+}
