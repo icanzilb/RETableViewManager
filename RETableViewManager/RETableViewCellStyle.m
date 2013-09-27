@@ -38,6 +38,7 @@
     self.selectedBackgroundImages = [[NSMutableDictionary alloc] init];
     self.cellHeight = 44.0;
     self.defaultCellSelectionStyle = UITableViewCellSelectionStyleBlue;
+    self.backgroundColor = [UIColor whiteColor];
     
     return self;
 }
@@ -52,6 +53,7 @@
         style.defaultCellSelectionStyle = self.defaultCellSelectionStyle;
         style.backgroundImageMargin = self.backgroundImageMargin;
         style.contentViewMargin = self.contentViewMargin;
+        style.backgroundColor = self.backgroundColor;
     }
     return style;
 }
