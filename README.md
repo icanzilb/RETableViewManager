@@ -64,14 +64,14 @@ Get your `UITableView` up and running in several lines of code:
 Also `RETableViewManager` provides APIs for super easy cell styling.
 
 ## Requirements
-* Xcode 4.6 or higher
+* Xcode 5 or higher
 * Apple LLVM compiler
 * iOS 6.0 or higher
 * ARC
 
 ## Demo
 
-Build and run the `RETableViewManagerExample` project in Xcode to see `RETableViewManager` in action.
+Build and run the `RETableViewManagerExample.xcworkspace` in Xcode to see `RETableViewManager` in action.
 
 ## Installation
 
@@ -99,7 +99,7 @@ Edit your Podfile and add RETableViewManager:
 
 ``` bash
 platform :ios, '6.0'
-pod 'RETableViewManager', '~> 1.2.5'
+pod 'RETableViewManager', '~> 1.3.2'
 ```
 
 Install into your Xcode project:
@@ -479,7 +479,7 @@ Quick example:
 ### Interface Builder Support
 
 Interface builder cells are supported out of the box, no special set up needed.
-Cells and items are being automatically registered like any other custom cell in `RETableViewManager`:
+Cells and items are being automatically registered like any other custom cells in `RETableViewManager`:
 
 ```objective-c
 self.manager[@"XIBTestItem"] = @"XIBTestCell";
@@ -523,7 +523,7 @@ self.manager.style.cellHeight = 42.0;
 [self.manager.style setSelectedBackgroundImage:[[UIImage imageNamed:@"Single_Selected"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)]
                                    forCellType:RETableViewCellTypeSingle];
 
-// Retain legacy grouped cell style in iOS [redacted]
+// Retain legacy grouped cell style in iOS 7
 //
 if (REDeviceIsUIKit7()) {
     self.manager.style.contentViewMargin = 10.0;

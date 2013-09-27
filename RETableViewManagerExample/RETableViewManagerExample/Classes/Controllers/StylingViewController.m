@@ -21,6 +21,10 @@
     self.tableView.backgroundView = nil;
     self.tableView.backgroundColor = [UIColor colorWithRed:0.967 green:1.000 blue:0.974 alpha:1.000];
     
+    // Style action bar
+    //
+    [[REActionBar appearance] setTintColor:[UIColor colorWithRed:61/255.0 green:119/255.0 blue:58/255.0 alpha:1.000]];
+    
     // Set default cell height
     //
     self.manager.style.cellHeight = 42.0;
@@ -47,9 +51,9 @@
     [self.manager.style setSelectedBackgroundImage:[[UIImage imageNamed:@"Single_Selected"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)]
                                        forCellType:RETableViewCellTypeSingle];
    
-    // Retain legacy grouped cell style in iOS [redacted]
+    // Retain legacy grouped cell style in iOS 7
     //
-    if (REDeviceIsUIKit7()) {
+    if (REUIKitIsFlatMode()) {
         self.manager.style.contentViewMargin = 10.0;
         self.manager.style.backgroundImageMargin = 10.0;
     }
@@ -72,6 +76,8 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    cell.textLabel.highlightedTextColor = [UIColor whiteColor];
+    
     for (UIView *view in cell.contentView.subviews) {
         if ([view isKindOfClass:[UILabel class]] || [view isKindOfClass:[UITextField class]] || [view isKindOfClass:[UITextView class]])
             ((UILabel *)view).font = [UIFont fontWithName:@"Avenir-Medium" size:16];

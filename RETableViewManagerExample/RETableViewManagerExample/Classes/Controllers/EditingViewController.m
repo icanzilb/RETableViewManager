@@ -10,6 +10,13 @@
 
 @interface EditingViewController ()
 
+@property (strong, readwrite, nonatomic) RETableViewManager *manager;
+
+// Deletable items with confirmation
+
+@property (strong, readwrite, nonatomic) RETableViewItem *itemToDelete;
+@property (copy, readwrite, nonatomic) void (^deleteConfirmationHandler)(void);
+
 @end
 
 @implementation EditingViewController
@@ -24,7 +31,7 @@
     
     // Create manager
     //
-    _manager = [[RETableViewManager alloc] initWithTableView:self.tableView];
+    self.manager = [[RETableViewManager alloc] initWithTableView:self.tableView];
     
     // Add sections and items
     //
@@ -32,10 +39,10 @@
     // ================= Deletable =================
     //
     RETableViewSection *section = [RETableViewSection sectionWithHeaderTitle:@"Deletable"];
-    [_manager addSection:section];
+    [self.manager addSection:section];
     
     for (NSInteger i = 1; i <= 5; i++) {
-        RETableViewItem *item = [RETableViewItem itemWithTitle:[NSString stringWithFormat:@"Section 1, Item %i", i] accessoryType:UITableViewCellAccessoryNone selectionHandler:nil];
+        RETableViewItem *item = [RETableViewItem itemWithTitle:[NSString stringWithFormat:@"Section 1, Item %li", (long) i] accessoryType:UITableViewCellAccessoryNone selectionHandler:nil];
         item.editingStyle = UITableViewCellEditingStyleDelete;
         item.deletionHandler = ^(RETableViewItem *item) {
             NSLog(@"Item removed: %@", item.title);
@@ -46,10 +53,10 @@
     // ================= Deletable with confirmation =================
     //
     section = [RETableViewSection sectionWithHeaderTitle:@"Deletable with confirmation"];
-    [_manager addSection:section];
+    [self.manager addSection:section];
     
     for (NSInteger i = 1; i <= 5; i++) {
-        RETableViewItem *item = [RETableViewItem itemWithTitle:[NSString stringWithFormat:@"Section 2, Item %i", i] accessoryType:UITableViewCellAccessoryNone selectionHandler:nil];
+        RETableViewItem *item = [RETableViewItem itemWithTitle:[NSString stringWithFormat:@"Section 2, Item %li", (long) i] accessoryType:UITableViewCellAccessoryNone selectionHandler:nil];
         item.editingStyle = UITableViewCellEditingStyleDelete;
         item.deletionHandlerWithCompletion = ^(RETableViewItem *item, void (^completion)(void)) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Confirmation" message:[NSString stringWithFormat:@"Are you sure you want to delete %@", item.title] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete", nil];
@@ -66,15 +73,15 @@
     // ================= Movable =================
     //
     section = [RETableViewSection sectionWithHeaderTitle:@"Movable"];
-    [_manager addSection:section];
+    [self.manager addSection:section];
     
     for (NSInteger i = 1; i <= 5; i++) {
-        RETableViewItem *item = [RETableViewItem itemWithTitle:[NSString stringWithFormat:@"Section 3, Item %i", i] accessoryType:UITableViewCellAccessoryNone selectionHandler:nil];
+        RETableViewItem *item = [RETableViewItem itemWithTitle:[NSString stringWithFormat:@"Section 3, Item %li", (long) i] accessoryType:UITableViewCellAccessoryNone selectionHandler:nil];
         item.moveHandler = ^BOOL(id item, NSIndexPath *sourceIndexPath, NSIndexPath *destinationIndexPath) {
             return YES;
         };
         item.moveCompletionHandler = ^(RETableViewItem *item, NSIndexPath *sourceIndexPath, NSIndexPath *destinationIndexPath) {
-            NSLog(@"Moved item: %@ from [%i,%i] to [%i,%i]", item.title, sourceIndexPath.section, sourceIndexPath.row, destinationIndexPath.section, destinationIndexPath.row);
+            NSLog(@"Moved item: %@ from [%li,%li] to [%li,%li]", item.title, (long) sourceIndexPath.section, (long) sourceIndexPath.row, (long) destinationIndexPath.section, (long) destinationIndexPath.row);
         };
         [section addItem:item];
     }
@@ -82,16 +89,16 @@
     // ================= Deletable & Movable =================
     //
     section = [RETableViewSection sectionWithHeaderTitle:@"Deletable & Movable"];
-    [_manager addSection:section];
+    [self.manager addSection:section];
     
     for (NSInteger i = 1; i <= 5; i++) {
-        RETableViewItem *item = [RETableViewItem itemWithTitle:[NSString stringWithFormat:@"Section 4, Item %i", i] accessoryType:UITableViewCellAccessoryNone selectionHandler:nil];
+        RETableViewItem *item = [RETableViewItem itemWithTitle:[NSString stringWithFormat:@"Section 4, Item %li", (long) i] accessoryType:UITableViewCellAccessoryNone selectionHandler:nil];
         item.editingStyle = UITableViewCellEditingStyleDelete;
         item.moveHandler = ^BOOL(id item, NSIndexPath *sourceIndexPath, NSIndexPath *destinationIndexPath) {
             return YES;
         };
         item.moveCompletionHandler = ^(RETableViewItem *item, NSIndexPath *sourceIndexPath, NSIndexPath *destinationIndexPath) {
-            NSLog(@"Moved item: %@ from [%i,%i] to [%i,%i]", item.title, sourceIndexPath.section, sourceIndexPath.row, destinationIndexPath.section, destinationIndexPath.row);
+            NSLog(@"Moved item: %@ from [%li,%li] to [%li,%li]", item.title, (long) sourceIndexPath.section, (long) sourceIndexPath.row, (long) destinationIndexPath.section, (long) destinationIndexPath.row);
         };
         [section addItem:item];
     }
@@ -99,10 +106,10 @@
     // ================= Can move only within this section =================
     //
     section = [RETableViewSection sectionWithHeaderTitle:@"Can move only within this section"];
-    [_manager addSection:section];
+    [self.manager addSection:section];
     
     for (NSInteger i = 1; i <= 5; i++) {
-        RETableViewItem *item = [RETableViewItem itemWithTitle:[NSString stringWithFormat:@"Section 5, Item %i", i] accessoryType:UITableViewCellAccessoryNone selectionHandler:nil];
+        RETableViewItem *item = [RETableViewItem itemWithTitle:[NSString stringWithFormat:@"Section 5, Item %li", (long) i] accessoryType:UITableViewCellAccessoryNone selectionHandler:nil];
         item.moveHandler = ^BOOL(id item, NSIndexPath *sourceIndexPath, NSIndexPath *destinationIndexPath) {
             return (destinationIndexPath.section == section.index);
         };
@@ -112,7 +119,7 @@
     // ================= Insert style =================
     //
     section = [[RETableViewSection alloc] initWithHeaderTitle:@"Insert style"];
-    [_manager addSection:section];
+    [self.manager addSection:section];
     RETableViewItem *item = [RETableViewItem itemWithTitle:[NSString stringWithFormat:@"Section 6, Item %i", 1] accessoryType:UITableViewCellAccessoryNone selectionHandler:nil];
     item.insertionHandler = ^(RETableViewItem *item) {
         NSLog(@"Insertion handler callback");

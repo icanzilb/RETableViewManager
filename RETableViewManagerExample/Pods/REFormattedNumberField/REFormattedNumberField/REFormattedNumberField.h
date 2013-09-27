@@ -1,6 +1,6 @@
 //
-// REPresenceValidator.m
-// REValidation
+// REFormattedNumberField.h
+// REFormattedNumberField
 //
 // Copyright (c) 2013 Roman Efimov (https://github.com/romaonthego)
 //
@@ -23,22 +23,17 @@
 // THE SOFTWARE.
 //
 
-#import "REPresenceValidator.h"
-#import "NSError+REValidation.h"
+#import <UIKit/UIKit.h>
+#import "NSString+RENumberFormat.h"
 
-@implementation REPresenceValidator
+@interface REFormattedNumberField : UITextField
 
-+ (NSString *)name
-{
-    return @"presence";
-}
+@property (copy, readwrite, nonatomic) NSString *format;
+@property (copy, readonly, nonatomic) NSString *unformattedText;
 
-+ (NSError *)validateObject:(NSString *)object variableName:(NSString *)name parameters:(NSDictionary *)parameters
-{
-    if (![object isKindOfClass:[NSString class]] || object.length == 0)
-        return [NSError re_validationErrorForDomain:@"com.REValidation.presence", name];
-    
-    return nil;
-}
+// Use NSString category NSString+RENumberFormat
+// - (NSString *)re_stringWithNumberFormat:(NSString *)format;
+//
+- (NSString *)string:(NSString *)string withNumberFormat:(NSString *)format __attribute__ ((deprecated));
 
 @end

@@ -10,9 +10,11 @@
 
 @interface ValidationsViewController ()
 
+@property (strong, readwrite, nonatomic) RETableViewManager *manager;
 @property (strong, readwrite, nonatomic) RETextItem *textItem;
 @property (strong, readwrite, nonatomic) RETextItem *emailItem;
 @property (strong, readwrite, nonatomic) RETextItem *urlItem;
+@property (strong, readwrite, nonatomic) REDateTimeItem *dateTimeItem;
 @property (strong, readwrite, nonatomic) RETextItem *inlineTestItem;
 
 @end
@@ -27,12 +29,12 @@
     
     // Create manager
     //
-    _manager = [[RETableViewManager alloc] initWithTableView:self.tableView];
+    self.manager = [[RETableViewManager alloc] initWithTableView:self.tableView];
     
     // Add a section
     //
     RETableViewSection *section = [RETableViewSection sectionWithHeaderTitle:@"Basic controls"];
-    [_manager addSection:section];
+    [self.manager addSection:section];
     
     // Add items
     //
@@ -47,6 +49,9 @@
     
     self.urlItem = [RETextItem itemWithTitle:@"URL" value:@"http://invalid-url.co%m" placeholder:@"URL item"];
     self.urlItem.validators = @[@"url"];
+    
+    self.dateTimeItem = [REDateTimeItem itemWithTitle:@"Date / Time" value:nil placeholder:nil format:@"MM/dd/yyyy hh:mm a" datePickerMode:UIDatePickerModeDateAndTime];
+    self.dateTimeItem.validators = @[@"presence"];
     
     // Inline Validation Example
     //
@@ -64,6 +69,7 @@
     [section addItem:self.emailItem];
     [section addItem:self.urlItem];
     [section addItem:self.inlineTestItem];
+    [section addItem:self.dateTimeItem];
 }
 
 #pragma mark -

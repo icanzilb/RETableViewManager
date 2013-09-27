@@ -7,8 +7,16 @@
 //
 
 #import "ControlsViewController.h"
+#import "MultilineTextItem.h"
 
 @interface ControlsViewController ()
+
+@property (strong, readwrite, nonatomic) RETableViewManager *manager;
+@property (strong, readwrite, nonatomic) RETableViewSection *basicControlsSection;
+@property (strong, readwrite, nonatomic) RETableViewSection *creditCardSection;
+@property (strong, readwrite, nonatomic) RETableViewSection *accessoriesSection;
+@property (strong, readwrite, nonatomic) RETableViewSection *cutCopyPasteSection;
+@property (strong, readwrite, nonatomic) RETableViewSection *buttonSection;
 
 @property (strong, readwrite, nonatomic) RETextItem *fullLengthFieldItem;
 @property (strong, readwrite, nonatomic) RETextItem *textItem;
@@ -34,7 +42,7 @@
     
     // Create manager
     //
-    _manager = [[RETableViewManager alloc] initWithTableView:self.tableView delegate:self];
+    self.manager = [[RETableViewManager alloc] initWithTableView:self.tableView delegate:self];
 
     self.basicControlsSection = [self addBasicControls];
     self.creditCardSection = [self addCreditCard];
@@ -66,7 +74,10 @@
     __typeof (&*self) __weak weakSelf = self;
     
     RETableViewSection *section = [RETableViewSection sectionWithHeaderTitle:@"Basic controls"];
-    [_manager addSection:section];
+    [self.manager addSection:section];
+    
+    // Custom item / cell
+    self.manager[@"MultilineTextItem"] = @"MultilineTextCell";
     
     // Add items to this section
     //
@@ -75,6 +86,9 @@
     self.fullLengthFieldItem = [RETextItem itemWithTitle:nil value:nil placeholder:@"Full length text field"];    
     self.textItem = [RETextItem itemWithTitle:@"Text item" value:nil placeholder:@"Text"];
     self.numberItem = [RENumberItem itemWithTitle:@"Phone" value:@"" placeholder:@"(123) 456-7890" format:@"(XXX) XXX-XXXX"];
+    self.numberItem.onEndEditing = ^(RENumberItem *item){
+        NSLog(@"Value: %@", item.value);
+    };
     self.passwordItem = [RETextItem itemWithTitle:@"Password" value:nil placeholder:@"Password item"];
     self.passwordItem.secureTextEntry = YES;
     self.boolItem = [REBoolItem itemWithTitle:@"Bool item" value:YES switchValueChangeHandler:^(REBoolItem *item) {
@@ -84,6 +98,9 @@
         NSLog(@"Value: %f", item.value);
     }];
     self.dateTimeItem = [REDateTimeItem itemWithTitle:@"Date / Time" value:[NSDate date] placeholder:nil format:@"MM/dd/yyyy hh:mm a" datePickerMode:UIDatePickerModeDateAndTime];
+    self.dateTimeItem.onChange = ^(REDateTimeItem *item){
+        NSLog(@"Value: %@", item.value.description);
+    };
     self.radioItem = [RERadioItem itemWithTitle:@"Radio" value:@"Option 4" selectionHandler:^(RERadioItem *item) {
         [item deselectRowAnimated:YES]; // same as [weakSelf.tableView deselectRowAtIndexPath:item.indexPath animated:YES];
         
@@ -91,7 +108,7 @@
         //
         NSMutableArray *options = [[NSMutableArray alloc] init];
         for (NSInteger i = 1; i < 40; i++)
-            [options addObject:[NSString stringWithFormat:@"Option %i", i]];
+            [options addObject:[NSString stringWithFormat:@"Option %li", (long) i]];
         
         // Present options controller
         //
@@ -122,7 +139,7 @@
         //
         NSMutableArray *options = [[NSMutableArray alloc] init];
         for (NSInteger i = 1; i < 40; i++)
-            [options addObject:[NSString stringWithFormat:@"Option %i", i]];
+            [options addObject:[NSString stringWithFormat:@"Option %li", (long) i]];
         
         // Present options controller
         //
@@ -158,6 +175,8 @@
     [section addItem:self.multipleChoiceItem];
     [section addItem:self.longTextItem];
     
+    [section addItem:[MultilineTextItem itemWithTitle:@"Custom item / cell example. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sem leo, malesuada tempor metus et, elementum pulvinar nibh."]];
+    
     RETableViewItem *titleAndImageItem = [RETableViewItem itemWithTitle:@"Text and image item" accessoryType:UITableViewCellAccessoryNone selectionHandler:^(RETableViewItem *item) {
         [item deselectRowAnimated:YES];
     }];
@@ -174,7 +193,7 @@
 - (RETableViewSection *)addCreditCard
 {
     RETableViewSection *section = [RETableViewSection sectionWithHeaderTitle:@"Credit card"];
-    [_manager addSection:section];
+    [self.manager addSection:section];
     self.creditCardItem = [RECreditCardItem item];
     [section addItem:self.creditCardItem];
     
@@ -187,7 +206,7 @@
 - (RETableViewSection *)addAccessories
 {
     RETableViewSection *section = [RETableViewSection sectionWithHeaderTitle:@"Accessories"];
-    [_manager addSection:section];
+    [self.manager addSection:section];
     
     // Add items to this section
     //
@@ -214,7 +233,7 @@
 - (RETableViewSection *)addCutCopyPaste
 {
     RETableViewSection *section = [RETableViewSection sectionWithHeaderTitle:@"Copy / pasting"];
-    [_manager addSection:section];
+    [self.manager addSection:section];
     
     RETableViewItem *copyItem = [RETableViewItem itemWithTitle:@"Long tap to copy this item" accessoryType:UITableViewCellAccessoryNone selectionHandler:^(RETableViewItem *item) {
         [item deselectRowAnimated:YES];
@@ -258,14 +277,12 @@
 
 - (RETableViewSection *)addButton
 {
-    __typeof (&*self) __weak weakSelf = self;
-    
     RETableViewSection *section = [RETableViewSection section];
-    [_manager addSection:section];
+    [self.manager addSection:section];
     
     RETableViewItem *buttonItem = [RETableViewItem itemWithTitle:@"Test button" accessoryType:UITableViewCellAccessoryNone selectionHandler:^(RETableViewItem *item) {
-        [weakSelf.tableView deselectRowAtIndexPath:item.indexPath animated:YES];
-        NSLog(@"Button pressed");
+        item.title = @"Pressed!";
+        [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
     }];
     buttonItem.textAlignment = NSTextAlignmentCenter;
     [section addItem:buttonItem];
