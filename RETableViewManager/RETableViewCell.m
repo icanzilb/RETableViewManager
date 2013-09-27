@@ -144,7 +144,7 @@
     }
     
     if ([self.section.style hasCustomBackgroundImage]) {
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = self.section.style.backgroundColor;
         if (!self.backgroundImageView) {
             [self addBackgroundImage];
         }
