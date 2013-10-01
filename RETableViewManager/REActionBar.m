@@ -79,6 +79,7 @@
         [self.actionBarDelegate actionBar:self doneButtonPressed:doneButtonItem];
 }
 
+//change the tint color in iOS7
 -(void)setTintColor:(UIColor*)color
 {
     [super setTintColor: color];
