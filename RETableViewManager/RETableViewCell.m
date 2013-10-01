@@ -293,4 +293,27 @@
     [self endEditing:YES];
 }
 
+-(void)updateActionBarFromField:(id)field hidden:(BOOL)isHidden
+{
+    if ([field respondsToSelector:@selector(inputAccessoryView)]==NO ||
+        isHidden==YES ||
+        ([field respondsToSelector:@selector(editable)]==YES && [field editable]==NO )
+        ) {
+        
+        self.actionBar = nil;
+        return;
+    }
+    
+    [field performSelector:@selector(setInputAccessoryView:) withObject:self.actionBar];
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+        if ([field keyboardAppearance] == UIKeyboardAppearanceDark) {
+            REActionBar* actionBar = (REActionBar*)[field inputAccessoryView];
+            actionBar.barStyle = UIBarStyleBlack;
+            [actionBar setTintColor:[UIColor colorWithWhite:0.75 alpha:1.0]];
+        }
+    }
+    
+}
+
 @end

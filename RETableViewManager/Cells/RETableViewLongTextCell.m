@@ -50,7 +50,6 @@
     
     self.textView = [[REPlaceholderTextView alloc] init];
     self.textView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.textView.inputAccessoryView = self.actionBar;
     self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.textView.backgroundColor = [UIColor clearColor];
     self.textView.delegate = self;
@@ -79,7 +78,6 @@
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[textView]-padding-|" options:0 metrics:metrics views:NSDictionaryOfVariableBindings(textView, label)]];
     
     self.textView.editable = self.item.editable;
-    self.textView.inputAccessoryView = self.textView.editable ?  self.actionBar : nil;
     
     self.textView.text = self.item.value;
     self.textView.placeholder = self.item.placeholder;
@@ -93,6 +91,9 @@
     self.textView.returnKeyType = self.item.returnKeyType;
     self.textView.enablesReturnKeyAutomatically = self.item.enablesReturnKeyAutomatically;
     self.textView.secureTextEntry = self.item.secureTextEntry;
+    
+    [self updateActionBarFromField:self.textView hidden:self.item.section.shouldHideKeyboardActionBar];
+
     [self.textView setNeedsDisplay];
 }
 

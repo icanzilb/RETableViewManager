@@ -99,7 +99,6 @@ static inline NSString * RECreditCardType(NSString *creditCardNumber)
     self.creditCardField = [[REFormattedNumberField alloc] initWithFrame:CGRectMake(0, 0, 216, self.frame.size.height - self.textFieldPositionOffset.height)];
     self.creditCardField.tag = 0;
     self.creditCardField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    self.creditCardField.inputAccessoryView = self.actionBar;
     self.creditCardField.delegate = self;
     self.creditCardField.placeholder = @"1234 1234 1234 1234";
     self.creditCardField.format = @"XXXX XXXX XXXX XXXX";
@@ -110,7 +109,6 @@ static inline NSString * RECreditCardType(NSString *creditCardNumber)
     self.expirationDateField = [[REFormattedNumberField alloc] initWithFrame:CGRectMake(320, 0, 80, self.frame.size.height)];
     self.expirationDateField.tag = 1;
     self.expirationDateField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    self.expirationDateField.inputAccessoryView = self.actionBar;
     self.expirationDateField.format = @"XX/XX";
     self.expirationDateField.placeholder = @"MM/YY";
     self.expirationDateField.delegate = self;
@@ -120,7 +118,6 @@ static inline NSString * RECreditCardType(NSString *creditCardNumber)
     self.cvvField = [[REFormattedNumberField alloc] initWithFrame:CGRectMake(320, 0, 60, self.frame.size.height)];
     self.cvvField.tag = 2;
     self.cvvField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    self.cvvField.inputAccessoryView = self.actionBar;
     self.cvvField.format = @"XXX";
     self.cvvField.placeholder = @"CVV";
     self.cvvField.delegate = self;
@@ -150,6 +147,10 @@ static inline NSString * RECreditCardType(NSString *creditCardNumber)
     self.cvvField.text = self.item.cvv;
     self.cvvField.font = [UIFont systemFontOfSize:17];
     self.cvvField.keyboardAppearance = self.item.keyboardAppearance;
+    
+    [self updateActionBarFromField:self.creditCardField hidden:self.item.section.shouldHideKeyboardActionBar];
+    [self updateActionBarFromField:self.expirationDateField hidden:self.item.section.shouldHideKeyboardActionBar];
+    [self updateActionBarFromField:self.cvvField hidden:self.item.section.shouldHideKeyboardActionBar];
 }
 
 - (void)layoutSubviews

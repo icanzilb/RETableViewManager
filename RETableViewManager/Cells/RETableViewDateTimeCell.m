@@ -53,7 +53,6 @@
     
     self.textField = [[UITextField alloc] initWithFrame:CGRectNull];
     self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    self.textField.inputAccessoryView = self.actionBar;
     self.textField.delegate = self;
     [self addSubview:self.textField];
     
@@ -99,6 +98,8 @@
     if (!self.item.title) {
         self.dateLabel.textAlignment = NSTextAlignmentLeft;
     }
+    
+    [self updateActionBarFromField:self.textField hidden:self.item.section.shouldHideKeyboardActionBar];
 }
 
 - (void)layoutSubviews

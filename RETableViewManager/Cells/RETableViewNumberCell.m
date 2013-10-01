@@ -50,7 +50,6 @@
     
     self.textField = [[REFormattedNumberField alloc] initWithFrame:CGRectNull];
     self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    self.textField.inputAccessoryView = self.actionBar;
     self.textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.textField.delegate = self;
     [self.textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
@@ -68,6 +67,8 @@
     self.textField.font = [UIFont systemFontOfSize:17];
     self.textField.keyboardAppearance = self.item.keyboardAppearance;
     self.textField.keyboardType = UIKeyboardTypeNumberPad;
+    
+    [self updateActionBarFromField:self.textField hidden:self.item.section.shouldHideKeyboardActionBar];
 }
 
 - (void)layoutSubviews

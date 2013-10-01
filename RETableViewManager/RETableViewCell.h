@@ -98,4 +98,7 @@ typedef NS_ENUM(NSInteger, RETableViewCellType) {
 
 @property (assign, readonly, nonatomic) BOOL loaded;
 
+
+-(void)updateActionBarFromField:(id)field hidden:(BOOL)isHidden;
+
 @end
