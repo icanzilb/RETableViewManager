@@ -35,7 +35,7 @@
 
 @implementation RETableViewOptionsController
 
-- (id)initWithItem:(RETableViewItem *)item options:(NSArray *)options multipleChoice:(BOOL)multipleChoice completionHandler:(void(^)(void))completionHandler
+- (id)initWithItem:(RETableViewItem *)item options:(NSArray *)options multipleChoice:(BOOL)multipleChoice
 {
     self = [super initWithStyle:UITableViewStyleGrouped];
     if (!self)
@@ -45,7 +45,22 @@
     self.options = options;
     self.title = item.title;
     self.multipleChoice = multipleChoice;
+    
+    return self;
+}
+
+- (id)initWithItem:(RETableViewItem *)item options:(NSArray *)options multipleChoice:(BOOL)multipleChoice completionHandler:(void(^)(void))completionHandler
+{
+    self = [self initWithItem:item options:options multipleChoice:multipleChoice];
     self.completionHandler = completionHandler;
+    
+    return self;
+}
+
+- (id)initWithItem:(RETableViewItem *)item options:(NSArray *)options multipleChoice:(BOOL)multipleChoice completionHandlerWithSelectedRow:(void(^)(int row))completionHandlerWithSelectedRow
+{
+    self = [self initWithItem:item options:options multipleChoice:multipleChoice];
+    self.completionHandlerWithSelectedRow = completionHandlerWithSelectedRow;
     
     return self;
 }
@@ -103,6 +118,8 @@
                 item.value = selectedItem.title;
                 if (weakSelf.completionHandler)
                     weakSelf.completionHandler();
+                if (weakSelf.completionHandlerWithSelectedRow)
+                    weakSelf.completionHandlerWithSelectedRow(selectedItem.indexPath.row);
             } else { // Multiple choice item
                 REMultipleChoiceItem * __weak item = (REMultipleChoiceItem *)weakSelf.item;
                 [weakSelf.tableView deselectRowAtIndexPath:selectedItem.indexPath animated:YES];
@@ -126,6 +143,8 @@
                 }
                 if (weakSelf.completionHandler)
                     weakSelf.completionHandler();
+                if (weakSelf.completionHandlerWithSelectedRow)
+                    weakSelf.completionHandlerWithSelectedRow(selectedItem.indexPath.row);
             }
         }]];
     };
