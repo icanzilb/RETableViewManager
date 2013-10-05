@@ -224,6 +224,9 @@
 
 - (NSIndexPath *)indexPathForPreviousResponderInSectionIndex:(NSUInteger)sectionIndex
 {
+    if (self.tableViewManager.sections.count <= sectionIndex) {
+        return nil;
+    }
     RETableViewSection *section = [self.tableViewManager.sections objectAtIndex:sectionIndex];
     NSUInteger indexInSection =  [section isEqual:self.section] ? [section.items indexOfObject:self.item] : section.items.count;
     for (NSInteger i = indexInSection - 1; i >= 0; i--) {
@@ -249,6 +252,9 @@
 
 - (NSIndexPath *)indexPathForNextResponderInSectionIndex:(NSUInteger)sectionIndex
 {
+    if (self.tableViewManager.sections.count <= sectionIndex) {
+        return nil;
+    }
     RETableViewSection *section = [self.tableViewManager.sections objectAtIndex:sectionIndex];
     NSUInteger indexInSection =  [section isEqual:self.section] ? [section.items indexOfObject:self.item] : -1;
     for (NSInteger i = indexInSection + 1; i < section.items.count; i++) {
